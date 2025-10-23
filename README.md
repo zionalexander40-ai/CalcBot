@@ -1,137 +1,71 @@
-# CalcBot
-Simple calculus tutor chat bot that explains core concepts, solves problems, and adjusts difficulty explanations based on user comprehension
+# 🎓 Interactive AI Calculus Tutor
 
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Mon Oct 20 15:27:32 2025
+## Overview
 
-@author: zionalexander
-"""
+The **Interactive AI Calculus Tutor** is an educational web app designed to help students strengthen their understanding of calculus concepts through natural language interaction and AI-assisted guidance. Built with **Python** and **Streamlit**, the project leverages machine learning principles to provide personalized feedback and adaptive explanations for math-related queries.
 
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+---
 
-"""
-Offline AI Calculus Tutor
-- ML classifier for topic prediction
-- Sympy for math solving
-- Adaptive explanations (simpler if needed)
-"""
+## 🧠 Features
 
-from sklearn.feature_extraction.text import CountVectorizer
-from sklearn.naive_bayes import MultinomialNB
-from sympy import symbols, diff, integrate, limit, sin, cos, exp
+* **Interactive Q&A:** Users can input calculus problems or conceptual questions, and the model responds with step-by-step guidance.
+* **AI-Driven Support:** Implements an intelligent backend that interprets user input and delivers contextual, accurate responses.
+* **Accessible Interface:** Streamlit-based front-end for seamless use in the browser, with simple input and clear output formatting.
+* **Educational Focus:** Designed to support students learning limits, derivatives, and integrals in a user-friendly environment.
 
-# --- symbolic variable ---
-x = symbols('x')
+---
 
-# --- Knowledge base with multiple explanation levels ---
-concepts = {
-    "derivative": {
-        "explanations": [
-            "A derivative measures how fast a function changes — the slope at a point.",
-            "Think of it as 'how steep' the graph is at a certain x value.",
-            "Imagine a car moving; the derivative is its speed at a particular moment."
-        ],
-        "example": "For f(x)=x**2, the derivative f'(x)=2*x."
-    },
-    "integral": {
-        "explanations": [
-            "An integral adds up tiny slices to find the total area under a curve.",
-            "Think of slicing the area under the curve into thin strips and adding them.",
-            "It’s like summing all the small steps to know how far you've walked."
-        ],
-        "example": "For f(x)=x, ∫x dx = (x**2)/2 + C."
-    },
-    "limit": {
-        "explanations": [
-            "A limit shows what value a function approaches as x gets close to something.",
-            "Zoom in on the graph near a point; the limit is the value you approach.",
-            "It’s like asking 'where will a ball land if I roll it very close to the edge?'"
-        ],
-        "example": "For f(x)=(x**2−1)/(x−1), as x→1, f(x)→2."
-    }
-}
+## 🧩 Tech Stack
 
-# --- Training data for ML ---
-training_questions = [
-    "how do i find the derivative of x squared",
-    "differentiate x**2",
-    "what is a derivative",
-    "find the integral of x squared",
-    "integrate sin x",
-    "what is an integral",
-    "what is a limit",
-    "find the limit as x approaches 2",
-    "limit of (x**2 - 4)/(x - 2)"
-]
+* **Language:** Python
+* **Framework:** Streamlit
+* **AI/ML:** Custom natural language interpretation logic for educational response generation
+* **Libraries Used:**
 
-training_labels = [
-    "derivative","derivative","derivative",
-    "integral","integral","integral",
-    "limit","limit","limit"
-]
+  * `streamlit`
+  * `numpy`
+  * `pandas` (optional for data handling)
+  * `sklearn` (if applicable for any modeling)
 
-# --- Train ML classifier ---
-vectorizer = CountVectorizer()
-X_train = vectorizer.fit_transform(training_questions)
-model = MultinomialNB()
-model.fit(X_train, training_labels)
+---
 
-# --- Solve math function ---
-def solve_math(topic, expression):
-    try:
-        if topic == "derivative":
-            return diff(expression, x)
-        elif topic == "integral":
-            return integrate(expression, x)
-        elif topic == "limit":
-            return limit(expression, x, 2)  # default x->2
-    except Exception:
-        return None
+## ⚙️ How to Run Locally
 
-# --- Adaptive explanation ---
-def adaptive_explanation(topic):
-    explanations = concepts[topic]["explanations"]
-    for explanation in explanations:
-        print(f"CalcBot: {explanation}")
-        user_feedback = input("Do you understand? (yes/no): ").lower()
-        if user_feedback in ["yes", "y"]:
-            print(f"Example: {concepts[topic]['example']}")
-            return
-    print("CalcBot: Keep practicing or try a simpler example!")
+1. **Clone the repository**
 
-# --- Main interactive loop ---
-print("🤖 Welcome to Offline CalcBot!")
-print("Ask about derivatives, integrals, or limits. Type 'quit' to exit.\n")
+   ```bash
+   git clone https://github.com/yourusername/interactive-ai-calc-tutor.git
+   cd interactive-ai-calc-tutor
+   ```
 
-while True:
-    question = input("You: ")
-    if question.lower() in ["quit","exit"]:
-        print("CalcBot: Goodbye! Keep practicing calculus.")
-        break
+2. **Install dependencies**
 
-    # Predict topic
-    X_test = vectorizer.transform([question])
-    predicted_topic = model.predict(X_test)[0]
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-    # Try extracting math expression from input
-    expr = None
-    words = question.replace("of","").replace("find","").split()
-    for w in words:
-        try:
-            expr = eval(w, {"x": x, "sin": sin, "cos": cos, "exp": exp})
-            break
-        except Exception:
-            continue
+3. **Run the Streamlit app**
 
-    # Respond with solution if expression exists
-    if expr:
-        solution = solve_math(predicted_topic, expr)
-        print(f"CalcBot: The {predicted_topic} of {expr} is {solution}")
-        # Show explanation after solving
-        adaptive_explanation(predicted_topic)
-    else:
-        # No math expression: just explain the concept
-        adaptive_explanation(predicted_topic)
+   ```bash
+   streamlit run app.py
+   ```
+
+4. **Open in your browser**
+   Navigate to the local URL displayed in the terminal, usually [http://localhost:8501](http://localhost:8501).
+
+---
+
+## 📈 Future Improvements
+
+* Integration with GPT-based API for more advanced and conversational explanations.
+* Visualization of calculus graphs and functions.
+* Tracking user progress over time to tailor responses.
+* Expansion into additional math domains (e.g., algebra, statistics).
+
+---
+
+## 💡 Author
+
+**Zion Alexander**
+Student at Brown University
+Passionate about using AI and EdTech to enhance learning and accessibility in mathematics and science education.
